@@ -7,7 +7,7 @@ class Tweet(CommomModel):
     user = models.ForeignKey("users.User"
                             , on_delete=models.CASCADE)
     
-    def __str__(self):
+    def __str__(self): 
         return f'Tweet by {self.user.username}: "{self.payload[:50]}"'
 
 class Like(CommomModel):
