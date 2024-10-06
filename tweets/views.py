@@ -8,8 +8,24 @@ from rest_framework.decorators import api_view
 from django.http import JsonResponse
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 User = get_user_model()
+
+class TweetListAPIView(APIView):
+    def get(self, request):
+        tweets = Tweet.objects.all()
+        serializer = TweetSerializer(tweets, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserTweetListAPIView(APIView):
+    def get(self, request, user_id):
+        user = get_object_or_404(User, pk=user_id)  # 유저가 존재하지 않으면 404 반환
+        tweets = Tweet.objects.filter(user=user)
+        serializer = TweetSerializer(tweets, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 # Create your views here.
 def tweet_list(request):
